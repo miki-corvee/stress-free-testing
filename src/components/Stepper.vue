@@ -1,16 +1,48 @@
 <script setup>
+
 import { ref } from 'vue'
 
-const counter = ref(0)
+const emit = defineEmits(['change'])
+
+const counter = ref(props.min || 0)
+
+const props = defineProps({
+  'min': {
+    default: 0,
+    type: Number
+  },
+  'max': {
+    default: 5,
+    type: Number
+  }
+})
+
+
+  function decrease () {
+    if (counter.value > props.min) {
+      counter.value--
+    emit('change', counter.value)
+    }
+  }
+
+  function increase () {
+    if (counter.value < props.max) {
+      counter.value++
+    
+    emit('change', counter.value)
+    }
+  }
+
+
 </script>
 
 <template>
   <div data-testid="counter" class="counter">
-    <button data-testid="decrement" @click="counter--">
+    <button data-testid="decrement" @click="decrease">
       <i-mdi-minus-circle />
     </button>
     <span>{{ counter }}</span>
-    <button data-testid="increment" @click="counter++">
+    <button data-testid="increment" @click="increase">
       <i-mdi-plus-circle />
     </button>
   </div>
